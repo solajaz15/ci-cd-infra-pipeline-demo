@@ -6,13 +6,13 @@
 terraform {
   required_version = ">=1.1.0" #version 
 
-  #     backend "s3" { 
-  # bucket                  = "3-tier-architecture-implementation"
-  # key                     = "path/env/jenkins-infra-deployment-of-terraform"
-  # region                  = "us-east-1"
-  # dynamodb_table          = "terraform-lock"
-  # encrypt                 = true
-  #     }
+      backend "s3" { 
+  bucket                  = "dolax-ci-cd-jenkins"
+  key                     = "path/env/jenkins-infra-deployment-of-terraform"
+  region                  = "us-east-1"
+  #dynamodb_table          = "terraform-lock"
+  #encrypt                 = true
+      }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -85,6 +85,16 @@ resource "aws_instance" "sonarqube-server" {
     Name = "sonarqube-server"
   }
 }
+
+resource "aws_ecr_repository" "this" {
+  name                 = "${var.component_name}-dolax-webapp"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
 
 
 #################################################################################
